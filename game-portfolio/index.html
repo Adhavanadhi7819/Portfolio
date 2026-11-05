@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b0a">
+  <meta name="description" content="Adhavan — game design student working in Unreal Engine across level design, gameplay spaces, and cinematic sequences.">
+  <title>Adhavan — Game Designer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090b0a;
+      --surface: #111412;
+      --surface-2: #171a17;
+      --ink: #f5f1e8;
+      --muted: #b7b4aa;
+      --line: rgba(245, 241, 232, .16);
+      --accent: #e2a04b;
+      --accent-ink: #17120b;
+      --max: 1240px;
+      --gutter: clamp(20px, 5vw, 72px);
+      --ease: cubic-bezier(.2, .7, .2, 1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 74% 7%, rgba(176, 105, 37, .09), transparent 32rem);
+    }
+    a { color: inherit; }
+    a:focus-visible, video:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    img, video { display: block; max-width: 100%; }
+    .wrap { width: min(var(--max), calc(100% - var(--gutter) * 2)); margin-inline: auto; }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: color-mix(in srgb, var(--bg) 89%, transparent);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .wordmark {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: Impact, "Arial Narrow", Arial, sans-serif;
+      font-size: 22px;
+      letter-spacing: .07em;
+      line-height: 1;
+    }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 2.5vw, 34px); }
+    .nav-links a {
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: var(--muted);
+      transition: color .2s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 65%, transparent); }
+    .hero {
+      min-height: min(760px, calc(100svh - 76px));
+      padding-block: clamp(48px, 7vw, 96px) clamp(60px, 9vw, 120px);
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      align-items: center;
+      gap: clamp(34px, 6vw, 88px);
+    }
+    .eyebrow, .micro-label {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 27px; height: 1px; background: currentColor; }
+    .hero h1, .section-title, .about-title, .contact-title {
+      margin: 22px 0 0;
+      font-family: Impact, "Arial Narrow", "Arial Black", sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: -.035em;
+      line-height: .88;
+    }
+    .hero h1 { font-size: clamp(64px, 8vw, 112px); }
+    .hero h1 span { display: block; color: var(--accent); }
+    .hero-copy > p {
+      max-width: 460px;
+      margin: 27px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 1.4vw, 18px);
+      line-height: 1.65;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 19px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .2s var(--ease), background .2s ease, border-color .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .button-primary { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+    .button-primary:hover { background: color-mix(in srgb, var(--accent) 86%, white); }
+    .arrow { font-size: 17px; line-height: 1; }
+    .hero-visual { position: relative; min-width: 0; }
+    .hero-image-frame {
+      position: relative;
+      aspect-ratio: 1.34;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      isolation: isolate;
+    }
+    .hero-image-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(4, 5, 4, .02) 35%, rgba(4, 5, 4, .76) 100%), linear-gradient(90deg, rgba(4, 5, 4, .22), transparent 65%);
+      pointer-events: none;
+    }
+    .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: saturate(.9); }
+    .image-index {
+      position: absolute;
+      inset: 18px auto auto 18px;
+      z-index: 2;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(7,8,7,.55);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+    .image-caption {
+      position: absolute;
+      z-index: 2;
+      inset: auto 22px 19px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      color: white;
+    }
+    .image-caption strong { display: block; font-size: 17px; letter-spacing: .01em; }
+    .image-caption span { display: block; color: rgba(255,255,255,.76); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
+    .image-caption .frame-num { color: var(--accent); font-family: Impact, sans-serif; font-size: 36px; line-height: .9; }
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      right: -16px;
+      bottom: -16px;
+      width: 36%;
+      height: 34%;
+      z-index: -1;
+      border-right: 1px solid var(--accent);
+      border-bottom: 1px solid var(--accent);
+    }
+    .hero-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .scroll-cue { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); }
+    .scroll-cue::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+    .section { padding-block: clamp(74px, 10vw, 132px); border-top: 1px solid var(--line); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+    .section-title { margin-top: 16px; font-size: clamp(48px, 7vw, 82px); }
+    .section-note { max-width: 340px; margin: 0 0 4px; color: var(--muted); font-size: 14px; }
+    .work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .work-card { min-width: 0; border: 1px solid var(--line); background: var(--surface); }
+    .work-card-media { position: relative; overflow: hidden; background: var(--surface-2); }
+    .work-card-media img { width: 100%; height: 100%; aspect-ratio: 1.63; object-fit: cover; transition: transform .65s var(--ease), filter .65s var(--ease); filter: saturate(.83); }
+    .work-card:hover .work-card-media img { transform: scale(1.035); filter: saturate(1); }
+    .work-card-media::after { content: ""; position: absolute; inset: 42% 0 0; pointer-events: none; background: linear-gradient(transparent, rgba(0,0,0,.42)); }
+    .card-number { position: absolute; z-index: 1; top: 16px; left: 16px; color: white; font-family: Impact, sans-serif; font-size: 14px; letter-spacing: .1em; }
+    .card-body { padding: 22px 22px 24px; }
+    .card-kicker { color: var(--accent); font-size: 14px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .card-body h3 { margin: 9px 0 8px; font-size: clamp(21px, 2.3vw, 28px); line-height: 1.12; letter-spacing: -.025em; }
+    .card-body p { max-width: 520px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .tag { padding: 6px 9px; border: 1px solid var(--line); color: var(--muted); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+    .work-card-wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr .85fr; }
+    .wide-gallery { display: grid; grid-template-columns: 1.08fr .92fr; min-height: 100%; }
+    .wide-gallery figure { position: relative; min-height: 100%; margin: 0; overflow: hidden; background: var(--surface-2); }
+    .wide-gallery figure + figure { border-left: 1px solid var(--line); }
+    .wide-gallery img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; filter: saturate(.84); }
+    .wide-gallery figcaption { position: absolute; inset: auto 14px 13px; color: white; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+    .work-card-wide .card-body { display: flex; flex-direction: column; justify-content: center; padding: clamp(22px, 4vw, 48px); }
+    .progress-mark { display: inline-flex; align-items: center; gap: 8px; width: fit-content; margin-top: 22px; color: var(--accent); font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .progress-mark::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .reel-layout { display: grid; grid-template-columns: .7fr 1.3fr; align-items: end; gap: 30px; margin-bottom: 24px; }
+    .reel-layout .section-title { max-width: 490px; }
+    .reel-layout p { margin: 0 0 6px; max-width: 420px; color: var(--muted); font-size: 14px; }
+    .reel-shell { padding: clamp(10px, 1.7vw, 20px); border: 1px solid var(--line); background: linear-gradient(135deg, var(--surface), transparent 75%); }
+    .reel-shell video { width: 100%; max-height: 650px; aspect-ratio: 16 / 9; background: #050605; object-fit: contain; }
+    .reel-caption { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 14px; color: var(--muted); font-size: 14px; letter-spacing: .11em; text-transform: uppercase; }
+    .reel-caption strong { color: var(--ink); font-weight: 700; }
+    .about-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(36px, 8vw, 110px); align-items: start; }
+    .about-title { max-width: 520px; font-size: clamp(48px, 6.8vw, 82px); }
+    .about-title span { color: var(--accent); }
+    .about-copy { padding-top: 8px; }
+    .about-copy > p { margin: 0; color: var(--muted); font-size: clamp(16px, 1.6vw, 19px); line-height: 1.75; }
+    .about-copy > p + p { margin-top: 16px; }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
+    .skill { padding: 10px 12px; border: 1px solid var(--line); color: var(--ink); font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .contact-band { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 28px; padding: clamp(28px, 5vw, 58px); border: 1px solid var(--line); background: linear-gradient(120deg, var(--surface), transparent 75%); }
+    .contact-title { max-width: 700px; font-size: clamp(44px, 6.5vw, 80px); }
+    .contact-band p { max-width: 520px; margin: 17px 0 0; color: var(--muted); }
+    .contact-slot { min-width: min(100%, 260px); padding: 13px 15px; border-left: 2px solid var(--accent); background: color-mix(in srgb, var(--surface-2) 78%, transparent); }
+    .contact-slot span, .contact-slot strong { display: block; }
+    .contact-slot span { color: var(--muted); font-size: 14px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .contact-slot strong { margin-top: 6px; color: var(--ink); font-size: 14px; letter-spacing: .08em; }
+    .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 24px 34px; color: var(--muted); font-size: 14px; letter-spacing: .11em; text-transform: uppercase; }
+    .site-footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 760px) {
+      .nav { min-height: 66px; gap: 12px; }
+      .nav-status { display: none; }
+      .nav-links { gap: 15px; }
+      .nav-links a { font-size: 14px; }
+      .hero { min-height: 0; grid-template-columns: 1fr; gap: 36px; padding-top: 52px; }
+      .hero h1 { font-size: clamp(64px, 16vw, 100px); }
+      .hero-copy > p { max-width: 560px; }
+      .hero-visual { margin-inline: 5px 12px; }
+      .hero-image-frame { aspect-ratio: 1.3; }
+      .section-head { align-items: start; flex-direction: column; }
+      .section-note { max-width: 520px; }
+      .work-card-wide { grid-template-columns: 1fr; }
+      .wide-gallery img { min-height: 240px; }
+      .reel-layout { grid-template-columns: 1fr; gap: 14px; }
+      .about-grid { grid-template-columns: 1fr; gap: 26px; }
+      .contact-band { grid-template-columns: 1fr; align-items: start; }
+      .contact-slot { width: 100%; }
+    }
+    @media (max-width: 520px) {
+      :root { --gutter: 20px; }
+      .wordmark { font-size: 19px; }
+      .nav-links { gap: 11px; }
+      .nav-links a { font-size: 14px; letter-spacing: .08em; }
+      .hero { padding-bottom: 76px; }
+      .hero-image-frame { aspect-ratio: 1.12; }
+      .image-caption { inset-inline: 14px; bottom: 14px; }
+      .hero-foot { font-size: 14px; letter-spacing: .1em; }
+      .work-grid { grid-template-columns: 1fr; gap: 16px; }
+      .work-card-wide { grid-column: auto; }
+      .wide-gallery img { min-height: 185px; }
+      .card-body { padding: 19px; }
+      .section { padding-block: 74px; }
+      .reel-caption { align-items: start; flex-direction: column; gap: 6px; }
+      .site-footer { align-items: start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="Adhavan, back to top">ADHAVAN<span aria-hidden="true">.</span></a>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#reel">Reel</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-status"><span class="status-dot" aria-hidden="true"></span>Open to opportunities</div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow">Game design · Unreal Engine</div>
+        <h1 id="hero-title">Building<br>worlds<span>to play in.</span></h1>
+        <p>Game design student shaping immersive levels, gameplay spaces, and camera-led sequences in Unreal Engine.</p>
+        <div class="actions">
+          <a class="button button-primary" href="#work">Explore work <span class="arrow" aria-hidden="true">↘</span></a>
+          <a class="button" href="#reel">Watch video <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-image-frame">
+          <img src="media/hero-village-clean.jpg" alt="Third-person game scene in a sunlit village, captured from Adhavan’s portfolio video" width="1068" height="430" fetchpriority="high">
+          <span class="image-index">In progress · Game level</span>
+          <div class="image-caption">
+            <div><span>Current work</span><strong>Worlds made to explore</strong></div>
+            <span class="frame-num" aria-hidden="true">03</span>
+          </div>
+        </div>
+        <div class="hero-foot"><span>Selected worlds · Unreal Engine</span><span class="scroll-cue">Scroll to explore</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="eyebrow">A few things I’ve built</div><h2 class="section-title" id="work-title">Selected work</h2></div>
+          <p class="section-note">Level design, vehicle sequences, and an in-progress game world—presented from the work shown in my portfolio walkthrough.</p>
+        </div>
+        <div class="work-grid">
+          <article class="work-card">
+            <div class="work-card-media">
+              <img src="media/gas-station.jpg" alt="Night-time gas station level with parked cars and bright pumps" width="762" height="408">
+              <span class="card-number">01 / ENVIRONMENT</span>
+            </div>
+            <div class="card-body">
+              <div class="card-kicker">Level design · Environment</div>
+              <h3>Gas Station Environment</h3>
+              <p>A night-time gas station scene with parked vehicles, shaped through level layout and post-process treatment.</p>
+              <div class="tags"><span class="tag">Level design</span><span class="tag">Environment</span><span class="tag">Post-process</span></div>
+            </div>
+          </article>
+          <article class="work-card">
+            <div class="work-card-media">
+              <img src="media/car-sequence.jpg" alt="White sports car on a dark city street in a driving sequence" width="760" height="408">
+              <span class="card-number">02 / SEQUENCE</span>
+            </div>
+            <div class="card-body">
+              <div class="card-kicker">Vehicle rigging · Camera</div>
+              <h3>Speed-run Sequence</h3>
+              <p>A driving route built around a speed-run, with vehicle rigging and a camera sequence to carry the motion.</p>
+              <div class="tags"><span class="tag">Route design</span><span class="tag">Vehicle rigging</span><span class="tag">Camera sequence</span></div>
+            </div>
+          </article>
+          <article class="work-card work-card-wide">
+            <div class="wide-gallery" aria-label="Two views from the in-progress game level">
+              <figure><img src="media/dungeon-level.jpg" alt="Moody stone dungeon with a lit central staircase" width="403" height="327"><figcaption>Dungeon · Atmosphere</figcaption></figure>
+              <figure><img src="media/village-overview.jpg" alt="Bright overhead view of a compact village level" width="403" height="329"><figcaption>Village · Layout</figcaption></figure>
+            </div>
+            <div class="card-body">
+              <div class="card-kicker">Current project · In progress</div>
+              <h3>A world in the making</h3>
+              <p>An ongoing game project shown through contrasting level spaces—from a torch-lit stone dungeon to a bright village, with a playable third-person scene in the walkthrough.</p>
+              <div class="tags"><span class="tag">Level design</span><span class="tag">World building</span><span class="tag">Unreal Engine</span></div>
+              <span class="progress-mark">In development</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reel" aria-labelledby="reel-title">
+      <div class="wrap">
+        <div class="reel-layout">
+          <div><div class="eyebrow">See it in motion</div><h2 class="section-title" id="reel-title">Portfolio<br>walkthrough</h2></div>
+          <p>A short tour through my work, project scenes, and current game level. Use the player controls to watch the full video.</p>
+        </div>
+        <div class="reel-shell">
+          <video controls playsinline preload="metadata" poster="media/hero-village-clean.jpg" aria-label="Adhavan’s portfolio walkthrough video, approximately four minutes and fifty-three seconds">
+            <source src="media/portfolio-reel.mp4" type="video/mp4">
+            Your browser does not support the video element. Open the included portfolio-reel.mp4 file to view it.
+          </video>
+          <div class="reel-caption"><strong>Adhavan · Portfolio video</strong><span>04:53 · MP4</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <div><div class="eyebrow">A little about me</div><h2 class="about-title" id="about-title">Curious by<br>design.<br><span>Playful by<br>nature.</span></h2></div>
+        <div class="about-copy">
+          <p>I’m Adhavan, a game design student with hands-on experience in Unreal Engine. My projects span level design, gameplay mechanics, and environment creation.</p>
+          <p>I’m looking for an opportunity to learn from a team and contribute creatively to game development.</p>
+          <div class="micro-label" style="margin-top:32px">Areas I’m exploring</div>
+          <div class="skill-list" aria-label="Skills and focus areas">
+            <span class="skill">Level design</span><span class="skill">Gameplay mechanics</span><span class="skill">Environment creation</span><span class="skill">Vehicle rigging</span><span class="skill">Camera sequences</span><span class="skill">Unreal Engine</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <div class="contact-band">
+          <div>
+            <div class="eyebrow">The next chapter</div>
+            <h2 class="contact-title" id="contact-title">Let’s build a world together.</h2>
+            <p>I’m open to game-design opportunities and collaborations. Add your preferred public email or profile link here before publishing.</p>
+          </div>
+          <div class="contact-slot"><span>Contact details</span><strong>ADD PUBLIC EMAIL / PROFILE</strong></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>© <span id="year">2026</span> Adhavan · Game design portfolio</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+</body>
+</html>
